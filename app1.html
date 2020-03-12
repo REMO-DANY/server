@@ -1,0 +1,36 @@
+<html>
+	<body>
+		<button onclick="myFunction()">display</button><br><br>
+		<strong>Cellno:</strong><p id="cellno"></p>
+		<strong>hospital:</strong><p id="hos"></p>
+		<strong>response:</strong><br>
+		<ul id="list">
+		</ul>
+		<script>
+			function myFunction(){
+				const http = new XMLHttpRequest();
+				http.responseType = "json";
+  				const url = 'http:192.168.43.174:3000/app1/response';
+				http.open("GET", url);
+				http.send();
+				http.onreadystatechange = function(){
+					if(this.status == 200 && this.readyState == 4){ 
+					cellno = document.getElementById("cellno");
+					if(cellno != null){
+						cellno.innerHTML = http.response.cellno
+					}
+					document.getElementById("hos").innerHTML = http.response.hospital;
+					for(var i=0;i<http.response.emergency_response.length;i++){
+						var list = document.getElementById('list'),
+						li = document.createElement("LI");
+						var res = http.response.emergency_response[i];
+						li_elt = document.createTextNode(res);
+						li.appendChild(li_elt);
+						list.appendChild(li);
+					}
+				   }
+				}
+			}
+		</script>
+	</body>
+</html>
